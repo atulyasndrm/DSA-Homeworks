@@ -1,0 +1,15 @@
+100000
+FinalQuick:15.474000 ms
+
+300000
+FinalQuick:44.802000 ms
+
+500000
+FinalQuick:71.028000 ms
+
+700000
+FinalQuick:103.962000 ms
+
+900000
+FinalQuick:147.350000 ms
+

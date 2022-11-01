@@ -1,0 +1,89 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+long long int Ifib(long long int n){
+   long long int a,b,t,i;
+if(n==0){
+    return 0;
+}else if(n==1){
+    return 1;
+}else{
+    a=0;b=1;
+    for(i=2;i<=n;i++){
+        t=b%2021;
+        b=a%2021+b%2021;
+        a=t%2021;
+    }return b%2021;
+}
+}
+
+
+long long int Rfib(long long int n){
+if(n==0){
+    return 0;
+}else if(n==1){
+    return 1;
+}else{
+   return (Rfib(n-1)%2021+Rfib(n-2)%2021)%2021;
+}
+}
+
+
+long long int** mpy(long long int** a,long long int** b){//Multiplication of matrices.
+    long long int p=(((a[0][0]%2021)*(b[0][0]%2021))%2021+((a[0][1]%2021)*(b[1][0]%2021))%2021)%2021;
+    long long int q=(((a[0][0]%2021)*(b[0][1]%2021))%2021+((a[0][1]%2021)*(b[1][1]%2021))%2021)%2021;
+    long long int r=(((a[1][0]%2021)*(b[0][1]%2021))%2021+((a[1][1]%2021)*(b[1][1]%2021))%2021)%2021;
+    a[0][0]=p%2021;a[0][1]=q%2021;a[1][0]=q%2021;a[1][1]=r%2021;
+    return a;
+}
+
+
+long long int** Mfib(long long int** a,long long int** b,long long int n){//MFib==CleverFib
+if(n==1){
+    return a;
+}
+long long int **t=Mfib(a,b,n/2);
+if(n%2==1&&n!=1){
+    return mpy(mpy(t,t),b);
+}else{
+    return mpy(t,t);
+}
+}
+
+int main(){
+    long long int n;
+    clock_t start_t, end_t;
+    scanf("%lld",&n);
+    double total_t;
+
+    long long int** a;long long int** b;//Initialisation of matrices for CleverFib.
+    a=(long long int**)malloc(2*sizeof(long long int*));
+    a[0]=(long long int*)malloc(2*(sizeof(long long int)));a[1]=(long long int*)malloc(2*(sizeof(long long int)));
+    b=(long long int**)malloc(2*sizeof(long long int*));
+    b[0]=(long long int*)malloc(2*(sizeof(long long int)));b[1]=(long long int*)malloc(2*(sizeof(long long int)));
+
+    a[0][1]=1;a[0][0]=1;a[1][0]=1;a[1][1]=0;
+    b[0][1]=1;b[0][0]=1;b[1][0]=1;b[1][1]=0;
+    
+    
+    double tot=0;
+    long long int i;
+// for(int j=0;j<3;j++){             //Used for Calculating time taken and finding required values of N
+    // for(n=1;n<60;n++){//
+        tot=0;
+        
+    for(i=0;i<30000 ;i++)   { //For greater precision and accuracy of time taken for a given N(Maximum value changed depending on algorithm)
+    start_t = clock();
+    printf("%lld",Ifib(n)%2021);
+    printf("%lld\n",(Mfib(a,b,n-1)[0][0])%2021);
+    printf("%lld",Rfib(n)%2021);
+    end_t = clock();
+    total_t = (double)(end_t - start_t) / CLOCKS_PER_SEC;
+    tot=tot+total_t;
+  
+    printf("%lld,%0.16f\n",n,tot);
+    }
+    // }
+    
+
+}
