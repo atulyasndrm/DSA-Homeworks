@@ -129,6 +129,8 @@ void ms(double* a, int l, int r){
     free(c);
 }
 
+
+
 void qs(double*a,int l,int r){
     int i;
     if(l<r){
@@ -137,9 +139,37 @@ void qs(double*a,int l,int r){
         qs(a,i+1,r);
     }
 }
-
-void ims(double*a,int l, int r){
-
+void ijoin(double*a,int l1,int r1,int l2,int r2,double* p2){
+    // double* c=(double*)malloc(sizeof(double)*(r2-l1+1));
+    int k=0;
+    while(l1<=r1&&l2<=r2){
+        if(a[l1]>a[l2]){
+            p2[k]=a[l2];
+            l2++;k++;
+        }else{
+            p2[k]=a[l1];
+            l1++;k++;
+        }
+    }
+    while(l1<=r1){
+        p2[k]=a[l1];
+        l1++;k++;
+    }
+    while(l2<=r2){
+        p2[k]=a[l2];
+        l2++;k++;
+    }
+}
+void ims(double* a, int l, int r,double* p2){
+    if(l==r){
+        return;
+    }
+    int mid=(l+r)/2;
+    ims(a,l,mid,p2);ims(a,mid+1,r,p2);
+    ijoin(a,l,mid,mid+1,r,p2);
+    for(int i=l;i<=r;i++){
+        a[i]=p2[i-l];
+    }
 }
 
 void Quick_VS_Merge_Comparisons(){
@@ -199,6 +229,7 @@ for(int n=100000;n<1000000+1;n=n+2*(100000)){
 
     double* a=(double*)malloc(sizeof(double)*n);
     double* b=(double*)malloc(sizeof(double)*n);
+    double* p2=(double*)malloc(sizeof(double)*n);
     double m_t=0, q_t=0;
     double m_time,q_time;
     int s=0;
@@ -213,30 +244,30 @@ for(int n=100000;n<1000000+1;n=n+2*(100000)){
             a[i]=ran;
             b[i]=ran;
         }
-        // start=clock();
-        // ms(a,0,n-1);
-        // end=clock();
-        // m_time=(double)(end-start);
-        // m_t=m_time+m_t;
+        start=clock();
+        ims(a,0,n-1,p2);
+        end=clock();
+        m_time=(double)(end-start);
+        m_t=m_time+m_t;
 
         start=clock();
         qs(b,0,n-1);
         end=clock();
         q_time=(double)(end-start);
         q_t=q_time+q_t;
-        // if(q_t>m_t){
-        //     s++;
-        //     // printf("Merge wins %d\n",s);
-        // }
+        if(q_t>m_t){
+            s++;
+            printf("Merge wins %d\n",s);
+        }
         if(j%10==0||j==499){
             printf("#");
         }
         
     }
-    // printf("\n%d\nFinalMerge: %lf ms\n",n,m_t/500);
+    printf("\n%d\nFinalMerge: %lf ms\n",n,m_t/500);
     printf("\n%d\nFinalQuick:%lf ms\n\n",n,q_t/500);
     fprintf(ptr,"%d\nFinalQuick:%lf ms\n\n",n,q_t/500);
-    // printf("Merge Wins %d Times",s);
+    printf("Merge Wins %d Times",s);
     printf("\n");
     free(a); free(b);
 }
