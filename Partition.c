@@ -2,6 +2,9 @@
 #include<stdlib.h>
 //Optimize it, as few values as possible, as fer lines as possible, 
 //check all the redundancies
+
+
+
 int main()
 {
     int n;
@@ -26,7 +29,7 @@ int main()
             a[no]=k;
             a[i]=t;
             no++;i++;
-        }
+        } 
         step++;   
     }
     printf("%d\n",step);
