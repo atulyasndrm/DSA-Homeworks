@@ -43,8 +43,9 @@ int n;int i;
         scanf("%d",a+i);
     }scanf("%d",&i);
     i--;
-printf("%d",a[qs(a,0,n-1,i)]);
-
+// for(i=0;i<n;i++){
+printf("%d ",a[qs(a,0,n-1,i)]);
+// }
 
     return 0;
 }
